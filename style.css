@@ -469,3 +469,92 @@ td.highlight {
     margin-bottom: 5px;
     font-family: 'Fredoka', sans-serif;
 }
+/* Melhorias para a aba de Regras */
+.rules-container {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    line-height: 1.6;
+}
+
+.rules-container > p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.rules-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.rules-list li {
+    background: var(--hover-bg);
+    padding: 20px;
+    border-left: 5px solid var(--primary);
+    border-radius: 0 10px 10px 0;
+    transition: transform 0.3s;
+}
+
+.rules-list li:hover {
+    transform: translateX(5px);
+}
+
+.rules-list li:nth-child(2) { border-color: var(--green); }
+.rules-list li:nth-child(3) { border-color: var(--yellow); }
+.rules-list li:nth-child(4) { border-color: var(--pink); }
+
+.rules-list li strong {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    font-family: 'Fredoka', sans-serif;
+}
+
+.rules-list li p {
+    margin: 0;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+/* Melhorias para estatísticas individuais */
+#user-exatos {
+    color: var(--yellow);
+}
+
+.stat-card h3 i {
+    margin-right: 8px;
+    color: var(--primary);
+}
+
+/* Animação para cards do pódio */
+.card-top {
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsividade para regras */
+@media (max-width: 768px) {
+    .rules-container {
+        padding: 20px;
+    }
+    
+    .rules-list li {
+        padding: 15px;
+    }
+}
