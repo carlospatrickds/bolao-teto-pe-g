@@ -36,6 +36,7 @@
         <button class="tab-btn" data-target="palpites"><i class="fa-solid fa-table-cells"></i> Palpites</button>
         <button class="tab-btn" data-target="desempenho"><i class="fa-solid fa-user-check"></i> Meu Desempenho</button>
         <button class="tab-btn" data-target="estatisticas"><i class="fa-solid fa-chart-pie"></i> Estatísticas</button>
+        <button class="tab-btn" data-target="regras"><i class="fa-solid fa-scale-balanced"></i> Regras</button>
     </nav>
 
     <main id="app-content">
@@ -123,6 +124,30 @@
                     <h3>Top 10 Participantes</h3>
                     <canvas id="top10Chart"></canvas>
                 </div>
+            </div>
+        </section>
+        <section id="regras" class="tab-content">
+            <h2 class="section-title">Regras e Critérios de Desempate</h2>
+            <div class="rules-container">
+                <p>O nosso ranking é automatizado e segue uma ordem rigorosa para garantir a justiça no Bolão. Em caso de empate na pontuação, o sistema avalia os seguintes critérios em ordem:</p>
+                <ol class="rules-list">
+                    <li>
+                        <strong><i class="fa-solid fa-star"></i> 1º Critério: Pontuação Total</strong>
+                        <p>A soma geral dos pontos obtidos na rodada.</p>
+                    </li>
+                    <li>
+                        <strong><i class="fa-solid fa-bullseye"></i> 2º Critério: Vitórias / Placares Exatos</strong>
+                        <p>Quem tiver cravado mais placares exatos (caso essa contagem esteja na planilha).</p>
+                    </li>
+                    <li>
+                        <strong><i class="fa-solid fa-keyboard"></i> 3º Critério: Número de Participações</strong>
+                        <p>Quem enviou mais palpites válidos. Se você deixou de apostar em um jogo, perde a vantagem no desempate.</p>
+                    </li>
+                    <li>
+                        <strong><i class="fa-solid fa-handshake-angle"></i> Empate Total</strong>
+                        <p>Se após todos os critérios os participantes continuarem rigorosamente iguais, eles <strong>dividirão a mesma posição</strong> no ranking e compartilharão o lugar no pódio!</p>
+                    </li>
+                </ol>
             </div>
         </section>
     </main>
