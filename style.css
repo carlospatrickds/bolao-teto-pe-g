@@ -231,9 +231,10 @@ h1 {
 
 .card-top .top-name { 
     font-weight: 700; 
-    font-size: 1.1rem; 
-    margin-bottom: 5px; 
-    word-wrap: break-word;
+    font-size: 0.95rem; 
+    color: var(--text-color);
+    margin-bottom: 6px;
+    line-height: 1.4; /* Espaçamento caso tenha mais de um nome */
 }
 
 .card-top .top-pts { 
