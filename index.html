@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolão TETO-PE | Copa do Mundo 2026</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Montserrat:wght@400;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-texture"></div>
+    
+    <header>
+        <div class="header-content">
+            <div class="title-container">
+                <i class="fa-solid fa-trophy trophy-icon"></i>
+                <div>
+                    <h1>BOLÃO TETO-PE</h1>
+                    <p class="subtitle">Copa do Mundo 2026 <i class="fa-regular fa-futbol"></i></p>
+                </div>
+            </div>
+            <button id="theme-toggle" class="btn-icon" aria-label="Alternar Tema">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab-btn active" data-target="classificacao"><i class="fa-solid fa-list-ol"></i> Classificação</button>
+        <button class="tab-btn" data-target="palpites"><i class="fa-solid fa-table-cells"></i> Palpites</button>
+        <button class="tab-btn" data-target="desempenho"><i class="fa-solid fa-user-check"></i> Meu Desempenho</button>
+        <button class="tab-btn" data-target="estatisticas"><i class="fa-solid fa-chart-pie"></i> Estatísticas</button>
+    </nav>
+
+    <main id="app-content">
+        <section id="classificacao" class="tab-content active">
+            <div class="top3-container" id="top3-cards">
+                </div>
+            
+            <div class="controls-bar">
+                <div class="search-box">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="search-classificacao" placeholder="Buscar participante...">
+                </div>
+                <div class="action-buttons">
+                    <button id="btn-share" class="btn-action"><i class="fa-solid fa-share-nodes"></i> Compartilhar</button>
+                    <button id="btn-export" class="btn-action"><i class="fa-solid fa-camera"></i> Salvar Imagem</button>
+                </div>
+            </div>
+
+            <div class="table-responsive" id="tabela-export-area">
+                <table id="table-classificacao">
+                    <thead>
+                        <tr>
+                            <th>Posição</th>
+                            <th>Participante</th>
+                            <th>Pontos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="palpites" class="tab-content">
+            <h2 class="section-title">Palpites da Rodada</h2>
+            <div class="table-responsive">
+                <table id="table-palpites">
+                    <thead>
+                        </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="desempenho" class="tab-content">
+            <h2 class="section-title">Encontre seus resultados</h2>
+            <div class="search-box large">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="search-desempenho" placeholder="Digite seu nome (ex: Kety, Thaw...)">
+            </div>
+            
+            <div id="resultado-desempenho" class="hidden">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Pontuação Total</h3>
+                        <p class="stat-value" id="user-total-pontos">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Jogos Disputados</h3>
+                        <p class="stat-value" id="user-jogos">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Placares Exatos ⭐</h3>
+                        <p class="stat-value" id="user-exatos">0</p>
+                    </div>
+                </div>
+                
+                <h3 class="subsection-title">Histórico de Palpites</h3>
+                <div class="history-list" id="user-historico">
+                    </div>
+            </div>
+        </section>
+
+        <section id="estatisticas" class="tab-content">
+            <div class="stats-grid" id="geral-stats">
+                </div>
+            
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h3>Distribuição de Pontos</h3>
+                    <canvas id="pontosChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Top 10 Participantes</h3>
+                    <canvas id="top10Chart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
