@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bolão TETO-PE | Copa do Mundo 2026</title>
     
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Montserrat:wght@400;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
     
+    <!-- Font Awesome (Ícones) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Estilo Customizado -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Textura suave de fundo -->
     <div class="background-texture"></div>
     
+    <!-- Cabeçalho -->
     <header>
         <div class="header-content">
             <div class="title-container">
@@ -31,6 +36,7 @@
         </div>
     </header>
 
+    <!-- Navegação por Abas (5 Abas Completas) -->
     <nav class="tabs">
         <button class="tab-btn active" data-target="classificacao"><i class="fa-solid fa-list-ol"></i> Classificação</button>
         <button class="tab-btn" data-target="palpites"><i class="fa-solid fa-table-cells"></i> Palpites</button>
@@ -39,10 +45,13 @@
         <button class="tab-btn" data-target="regras"><i class="fa-solid fa-scale-balanced"></i> Regras</button>
     </nav>
 
+    <!-- Conteúdo Principal -->
     <main id="app-content">
+        
+        <!-- Aba 1 — Classificação -->
         <section id="classificacao" class="tab-content active">
-            <div class="top3-container" id="top3-cards">
-                </div>
+            <!-- Pódio Renderizado Dinamicamente pelo JS -->
+            <div class="top3-container" id="top3-cards"></div>
             
             <div class="controls-bar">
                 <div class="search-box">
@@ -65,23 +74,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        </tbody>
+                        <!-- Injetado via JS -->
+                    </tbody>
                 </table>
             </div>
         </section>
 
+        <!-- Aba 2 — Palpites -->
         <section id="palpites" class="tab-content">
             <h2 class="section-title">Palpites da Rodada</h2>
             <div class="table-responsive">
                 <table id="table-palpites">
                     <thead>
-                        </thead>
+                        <!-- Cabeçalho dinâmico baseado nos jogos do Sheets -->
+                    </thead>
                     <tbody>
-                        </tbody>
+                        <!-- Injetado via JS -->
+                    </tbody>
                 </table>
             </div>
         </section>
 
+        <!-- Aba 3 — Meu Desempenho -->
         <section id="desempenho" class="tab-content">
             <h2 class="section-title">Encontre seus resultados</h2>
             <div class="search-box large">
@@ -105,55 +119,65 @@
                     </div>
                 </div>
                 
-                <h3 class="subsection-title">Histórico de Palpites</h3>
+                <h3 class="subsection-title" style="margin: 1.5rem 0 1rem 0; font-family: 'Fredoka';">Histórico de Palpites</h3>
                 <div class="history-list" id="user-historico">
-                    </div>
+                    <!-- Injetado via JS -->
+                </div>
             </div>
         </section>
 
+        <!-- Aba 4 — Estatísticas -->
         <section id="estatisticas" class="tab-content">
+            <h2 class="section-title">Dados Gerais do Bolão</h2>
             <div class="stats-grid" id="geral-stats">
-                </div>
+                <!-- Cards Injetados via JS -->
+            </div>
             
             <div class="charts-container">
                 <div class="chart-box">
-                    <h3>Distribuição de Pontos</h3>
+                    <h3 style="font-family: 'Fredoka'; margin-bottom: 15px;">Distribuição de Pontos</h3>
                     <canvas id="pontosChart"></canvas>
                 </div>
                 <div class="chart-box">
-                    <h3>Top 10 Participantes</h3>
+                    <h3 style="font-family: 'Fredoka'; margin-bottom: 15px;">Top 10 Participantes</h3>
                     <canvas id="top10Chart"></canvas>
                 </div>
             </div>
         </section>
+
+        <!-- Aba 5 — Regras -->
         <section id="regras" class="tab-content">
             <h2 class="section-title">Regras e Critérios de Desempate</h2>
             <div class="rules-container">
-                <p>O nosso ranking é automatizado e segue uma ordem rigorosa para garantir a justiça no Bolão. Em caso de empate na pontuação, o sistema avalia os seguintes critérios em ordem:</p>
+                <p>O nosso ranking é gerado de forma totalmente automatizada. Em caso de empate na pontuação dos participantes, o sistema realiza uma varredura aplicando os seguintes critérios de forma sequencial:</p>
                 <ol class="rules-list">
                     <li>
                         <strong><i class="fa-solid fa-star"></i> 1º Critério: Pontuação Total</strong>
-                        <p>A soma geral dos pontos obtidos na rodada.</p>
+                        <p>Soma geral de todos os pontos obtidos acumulados na tabela.</p>
                     </li>
                     <li>
                         <strong><i class="fa-solid fa-bullseye"></i> 2º Critério: Vitórias / Placares Exatos</strong>
-                        <p>Quem tiver cravado mais placares exatos (caso essa contagem esteja na planilha).</p>
+                        <p>Número de placares cravados de forma idêntica (caso a coluna respectiva esteja configurada e mapeada na planilha do Google Sheets).</p>
                     </li>
                     <li>
                         <strong><i class="fa-solid fa-keyboard"></i> 3º Critério: Número de Participações</strong>
-                        <p>Quem enviou mais palpites válidos. Se você deixou de apostar em um jogo, perde a vantagem no desempate.</p>
+                        <p>Quantidade de palpites válidos enviados. Deixar de apostar em uma rodada ou jogo remove a sua vantagem neste critério de desempate.</p>
                     </li>
                     <li>
-                        <strong><i class="fa-solid fa-handshake-angle"></i> Empate Total</strong>
-                        <p>Se após todos os critérios os participantes continuarem rigorosamente iguais, eles <strong>dividirão a mesma posição</strong> no ranking e compartilharão o lugar no pódio!</p>
+                        <strong><i class="fa-solid fa-handshake-angle"></i> Empate Total e Pódio Dividido</strong>
+                        <p>Caso o empate persista em todas as etapas anteriores, os participantes <strong>dividirão o mesmo degrau do pódio</strong> e a mesma posição no ranking geral de classificação.</p>
                     </li>
                 </ol>
             </div>
         </section>
+
     </main>
 
+    <!-- Dependências Externas (Gráficos e Exportação de PNG) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- Script da Aplicação -->
     <script src="script.js"></script>
 </body>
 </html>
