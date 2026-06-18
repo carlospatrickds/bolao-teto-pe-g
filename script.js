@@ -70,12 +70,11 @@ async function fetchData() {
     }
 }
 
-// Parser e Sanitização Avançada
+// --- Parser e Sanitização com Cálculo de Ranking Denso ---
 function parseCSV(csv) {
     const lines = csv.split('\n').map(line => line.trim()).filter(line => line !== '');
     if (lines.length === 0) return;
 
-    // Encontra a linha real do cabeçalho
     let headerIndex = -1;
     for (let i = 0; i < lines.length; i++) {
         if (lines[i].toLowerCase().includes('participante')) {
@@ -89,29 +88,77 @@ function parseCSV(csv) {
     
     const partKey = appData.headers.find(h => h.toLowerCase().includes('participante')) || appData.headers[1];
     const ptsKey = appData.headers.find(h => h.toLowerCase().includes('ponto')) || appData.headers[2];
+    const vitoriasKey = appData.headers.find(h => h.toLowerCase().includes('vitór') || h.toLowerCase().includes('acert'));
+    const ptsIndex = appData.headers.findIndex(h => h.toLowerCase().includes('ponto'));
+    const gamesHeaders = appData.headers.slice(ptsIndex + 1);
 
     let rawRows = lines.slice(headerIndex + 1).map(line => {
         const values = line.split(',').map(v => v.replace(/\r|"/g, '').trim());
         let rowData = {};
-        appData.headers.forEach((header, index) => {
-            rowData[header] = values[index] || '-';
+        appData.headers.forEach((header, index) => { rowData[header] = values[index] || '-'; });
+        
+        // Contagem de participações
+        let participacoes = 0;
+        gamesHeaders.forEach(game => {
+            if (rowData[game] && rowData[game] !== '-') participacoes++;
         });
+        rowData['_participacoes'] = participacoes;
         return rowData;
     });
 
-    // Sanitização estrita: remove cabeçalhos fantasmas, linhas vazias ou sem pontuação numérica
+    // Filtro de sanitização
     appData.rows = rawRows.filter(row => {
         const nome = row[partKey];
         const pontosRaiz = row[ptsKey];
         if (!nome || nome === '-' || nome.toLowerCase() === 'participante' || nome.trim() === '') return false;
-        const pontosNum = parseInt(pontosRaiz);
-        return !isNaN(pontosNum);
+        return !isNaN(parseInt(pontosRaiz));
     });
 
-    // Ordenação decrescente por pontos estável
-    appData.rows.sort((a, b) => parseInt(b[ptsKey]) - parseInt(a[ptsKey]));
+    // Ordenação inicial
+    appData.rows.sort((a, b) => {
+        const pontosA = parseInt(a[ptsKey]) || 0;
+        const pontosB = parseInt(b[ptsKey]) || 0;
+        if (pontosB !== pontosA) return pontosB - pontosA;
+
+        if (vitoriasKey) {
+            const vitA = parseInt(a[vitoriasKey]) || 0;
+            const vitB = parseInt(b[vitoriasKey]) || 0;
+            if (vitB !== vitA) return vitB - vitA;
+        }
+
+        const partA = a['_participacoes'] || 0;
+        const partB = b['_participacoes'] || 0;
+        if (partB !== partA) return partB - partA;
+
+        // Se empatar em TUDO, a ordem no array fica alfabética para ficar organizado
+        return a[partKey].localeCompare(b[partKey]);
+    });
+
+    // CÁLCULO DE POSIÇÃO (RANKING DENSO) - Agrupa empates na mesma posição
+    if (appData.rows.length > 0) {
+        let currentRank = 1;
+        appData.rows[0]._rank = 1;
+
+        for (let i = 1; i < appData.rows.length; i++) {
+            const prev = appData.rows[i - 1];
+            const curr = appData.rows[i];
+
+            const samePoints = parseInt(prev[ptsKey]) === parseInt(curr[ptsKey]);
+            const sameWins = (vitoriasKey ? parseInt(prev[vitoriasKey]) || 0 : 0) === (vitoriasKey ? parseInt(curr[vitoriasKey]) || 0 : 0);
+            const sameParts = prev['_participacoes'] === curr['_participacoes'];
+
+            // Se for exatamente igual nos 3 critérios, recebe a MESMA posição do anterior
+            if (samePoints && sameWins && sameParts) {
+                curr._rank = currentRank; 
+            } else {
+                currentRank++; // Se diferir, desce um degrau no ranking
+                curr._rank = currentRank;
+            }
+        }
+    }
 }
 
+// --- Aba 1: Classificação (Baseada no Rank real) ---
 function renderClassification(filterText = '') {
     const tbody = document.querySelector('#table-classificacao tbody');
     tbody.innerHTML = '';
@@ -123,15 +170,16 @@ function renderClassification(filterText = '') {
         row[partKey].toLowerCase().includes(filterText.toLowerCase())
     );
 
-    filteredRows.forEach((row, index) => {
-        let medal = index + 1;
-        if (index === 0) medal = '🥇';
-        else if (index === 1) medal = '🥈';
-        else if (index === 2) medal = '🥉';
+    filteredRows.forEach(row => {
+        // Usa a posição calculada em vez do índice do array
+        let displayRank = row._rank; 
+        if (row._rank === 1) displayRank = '🥇';
+        else if (row._rank === 2) displayRank = '🥈';
+        else if (row._rank === 3) displayRank = '🥉';
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${medal}</td>
+            <td>${displayRank}</td>
             <td class="highlight">${row[partKey]}</td>
             <td><strong>${row[ptsKey]}</strong></td>
         `;
@@ -139,14 +187,39 @@ function renderClassification(filterText = '') {
     });
 }
 
+// --- Top 3 Pódio (Suporta múltiplos nomes por degrau) ---
 function renderTop3() {
     const container = document.getElementById('top3-cards');
     container.innerHTML = '';
-    
     if (appData.rows.length === 0) return;
     
     const partKey = appData.headers.find(h => h.toLowerCase().includes('participante'));
     const ptsKey = appData.headers.find(h => h.toLowerCase().includes('ponto'));
+
+    // Filtra todos os participantes que estão nas posições 1, 2 e 3
+    const rank1 = appData.rows.filter(r => r._rank === 1);
+    const rank2 = appData.rows.filter(r => r._rank === 2);
+    const rank3 = appData.rows.filter(r => r._rank === 3);
+
+    // Função para juntar nomes empatados com quebra de linha (<br>)
+    const formatNames = (arr) => arr.map(r => r[partKey]).join('<br>');
+    const getPts = (arr) => arr.length > 0 ? arr[0][ptsKey] : '-';
+
+    const podiumOrder = [];
+    if (rank2.length > 0) podiumOrder.push({ names: formatNames(rank2), pts: getPts(rank2), pos: 2, medal: '🥈' });
+    if (rank1.length > 0) podiumOrder.push({ names: formatNames(rank1), pts: getPts(rank1), pos: 1, medal: '🥇' });
+    if (rank3.length > 0) podiumOrder.push({ names: formatNames(rank3), pts: getPts(rank3), pos: 3, medal: '🥉' });
+
+    podiumOrder.forEach(item => {
+        container.innerHTML += `
+            <div class="card-top pos-${item.pos}">
+                <div class="medal">${item.medal}</div>
+                <div class="top-name">${item.names}</div>
+                <div class="top-pts">${item.pts} pts</div>
+            </div>
+        `;
+    });
+}
 
     // Monta a ordem visual clássica de pódio: [2º Lugar, 1º Lugar, 3º Lugar]
     const podiumOrder = [];
