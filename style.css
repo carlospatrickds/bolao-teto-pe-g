@@ -358,38 +358,123 @@ td.highlight {
     color: var(--primary);
 }
 
-/* Células de palpite com pontuação */
+/* Células de palpite com pontuação - ESTILOS CORRIGIDOS */
 .cell-palpite {
+    padding: 12px 8px !important;
+    vertical-align: middle;
+    min-width: 150px;
+    max-width: 180px;
+}
+
+.cell-palpite-empty {
+    background: #f9f9f9;
+}
+
+.palpite-conteudo {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 6px;
     align-items: center;
+    width: 100%;
 }
 
-.cell-palpite .palpite-texto {
+.palpite-texto {
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    color: var(--text-color);
+    text-align: center;
+    line-height: 1.3;
+    word-wrap: break-word;
+    max-width: 100%;
 }
 
-.cell-palpite .palpite-info {
-    display: flex;
+.palpite-pontuacao {
+    display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 12px;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
+.palpite-icone {
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.palpite-pontos-texto {
+    font-weight: 700;
+}
+
+/* Cores específicas para cada tipo de palpite */
 .palpite-exato {
-    color: var(--yellow);
-    text-shadow: 0 0 3px rgba(253, 197, 51, 0.5);
+    background: rgba(253, 197, 51, 0.25) !important;
+    color: #b8860b !important;
+    border: 1px solid rgba(253, 197, 51, 0.5);
 }
 
 .palpite-vencedor {
-    color: var(--green);
+    background: rgba(47, 172, 102, 0.2) !important;
+    color: #2e7d32 !important;
+    border: 1px solid rgba(47, 172, 102, 0.4);
 }
 
 .palpite-erro {
-    color: var(--gray);
+    background: rgba(200, 200, 200, 0.2) !important;
+    color: #757575 !important;
+    border: 1px solid rgba(150, 150, 150, 0.3);
+}
+
+/* Ajuste para tema escuro */
+[data-theme="dark"] .palpite-exato {
+    background: rgba(253, 197, 51, 0.3) !important;
+    color: #ffd54f !important;
+}
+
+[data-theme="dark"] .palpite-vencedor {
+    background: rgba(47, 172, 102, 0.25) !important;
+    color: #66bb6a !important;
+}
+
+[data-theme="dark"] .palpite-erro {
+    background: rgba(100, 100, 100, 0.3) !important;
+    color: #9e9e9e !important;
+}
+
+/* Ajuste na tabela para melhor visualização */
+#table-palpites td {
+    font-size: 0.85rem;
+    padding: 10px 8px;
+}
+
+#table-palpites .participante-nome {
+    font-weight: 700;
+    color: var(--primary);
+    min-width: 150px;
+    position: sticky;
+    left: 0;
+    background: var(--card-bg);
+    z-index: 1;
+}
+
+/* Responsividade para a tabela de palpites */
+@media (max-width: 768px) {
+    .palpite-texto {
+        font-size: 0.75rem;
+    }
+    
+    .palpite-pontuacao {
+        font-size: 0.7rem;
+        padding: 2px 6px;
+    }
+    
+    .cell-palpite {
+        min-width: 120px;
+        padding: 8px 4px !important;
+    }
 }
 
 /* Grid de Estatísticas */
