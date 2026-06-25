@@ -5,22 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bolão TETO-PE | Copa do Mundo 2026</title>
     
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Montserrat:wght@400;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome (Ícones) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Estilo Customizado -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Textura suave de fundo -->
     <div class="background-texture"></div>
     
-    <!-- Cabeçalho -->
     <header>
         <div class="header-content">
             <div class="title-container">
@@ -36,7 +31,6 @@
         </div>
     </header>
 
-    <!-- Navegação por Abas (5 Abas Completas) -->
     <nav class="tabs">
         <button class="tab-btn active" data-target="classificacao"><i class="fa-solid fa-list-ol"></i> Classificação</button>
         <button class="tab-btn" data-target="palpites"><i class="fa-solid fa-table-cells"></i> Palpites</button>
@@ -45,15 +39,14 @@
         <button class="tab-btn" data-target="regras"><i class="fa-solid fa-scale-balanced"></i> Regras</button>
     </nav>
 
-    <!-- Conteúdo Principal -->
     <main id="app-content">
         
-        <!-- Aba 1 — Classificação -->
         <section id="classificacao" class="tab-content active">
-            <!-- Pódio Renderizado Dinamicamente pelo JS -->
             <div class="top3-container" id="top3-cards"></div>
             
-            <div class="controls-bar">
+            <div id="desempate-detalhes" class="desempate-container"></div>
+            
+            <div class="controls-bar hide-on-pdf">
                 <div class="search-box">
                     <i class="fa-solid fa-search"></i>
                     <input type="text" id="search-classificacao" placeholder="Buscar participante...">
@@ -61,6 +54,7 @@
                 <div class="action-buttons">
                     <button id="btn-share" class="btn-action"><i class="fa-solid fa-share-nodes"></i> Compartilhar</button>
                     <button id="btn-export" class="btn-action"><i class="fa-solid fa-camera"></i> Salvar Imagem</button>
+                    <button id="btn-export-pdf-class" class="btn-action"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
                 </div>
             </div>
 
@@ -74,36 +68,45 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Injetado via JS -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- Aba 2 — Palpites -->
         <section id="palpites" class="tab-content">
             <h2 class="section-title">Palpites da Rodada</h2>
             <div class="table-responsive">
                 <table id="table-palpites">
                     <thead>
-                        <!-- Cabeçalho dinâmico baseado nos jogos do Sheets -->
-                    </thead>
+                        </thead>
                     <tbody>
-                        <!-- Injetado via JS -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- Aba 3 — Meu Desempenho -->
         <section id="desempenho" class="tab-content">
             <h2 class="section-title">Encontre seus resultados</h2>
-            <div class="search-box large">
-                <i class="fa-solid fa-user"></i>
-                <input type="text" id="search-desempenho" placeholder="Digite seu nome (ex: Kety, Thaw...)">
+            
+            <div class="selector-container hide-on-pdf">
+                <div class="selector-box">
+                    <i class="fa-solid fa-user-tag"></i>
+                    <select id="select-participante">
+                        <option value="">👇 Selecione seu nome na lista</option>
+                        </select>
+                </div>
+                <span class="selector-divider">ou</span>
+                <div class="search-box large">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="search-desempenho" placeholder="Digite seu nome (ex: Kety, Thaw...)">
+                </div>
             </div>
             
             <div id="resultado-desempenho" class="hidden">
+                <div class="action-buttons hide-on-pdf" style="justify-content: flex-end; margin-bottom: 20px;">
+                    <button id="btn-export-pdf-desempenho" class="btn-action"><i class="fa-solid fa-file-pdf"></i> Gerar PDF do Desempenho</button>
+                </div>
+
                 <div class="stats-grid">
                     <div class="stat-card">
                         <h3>Pontuação Total</h3>
@@ -114,24 +117,21 @@
                         <p class="stat-value" id="user-jogos">0</p>
                     </div>
                     <div class="stat-card">
-                        <h3>Placares Exatos ⭐</h3>
+                        <h3>Placares Exatos </h3>
                         <p class="stat-value" id="user-exatos">0</p>
                     </div>
                 </div>
                 
                 <h3 class="subsection-title" style="margin: 1.5rem 0 1rem 0; font-family: 'Fredoka';">Histórico de Palpites</h3>
                 <div class="history-list" id="user-historico">
-                    <!-- Injetado via JS -->
-                </div>
+                    </div>
             </div>
         </section>
 
-        <!-- Aba 4 — Estatísticas -->
         <section id="estatisticas" class="tab-content">
             <h2 class="section-title">Dados Gerais do Bolão</h2>
             <div class="stats-grid" id="geral-stats">
-                <!-- Cards Injetados via JS -->
-            </div>
+                </div>
             
             <div class="charts-container">
                 <div class="chart-box">
@@ -145,7 +145,6 @@
             </div>
         </section>
 
-        <!-- Aba 5 — Regras -->
         <section id="regras" class="tab-content">
             <h2 class="section-title">Regras e Critérios de Desempate</h2>
             <div class="rules-container">
@@ -173,11 +172,10 @@
 
     </main>
 
-    <!-- Dependências Externas (Gráficos e Exportação de PNG) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
-    <!-- Script da Aplicação -->
     <script src="script.js"></script>
 </body>
 </html>
