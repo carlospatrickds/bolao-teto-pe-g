@@ -406,6 +406,8 @@ function renderDesempateDetalhes() {
 }
 
 // ✅ RENDERIZA PALPITES COM PONTUAÇÃO INDIVIDUAL E ESTRELAS
+// Substitua a função renderPredictions() no script.js por esta versão corrigida:
+
 function renderPredictions() {
     const thead = document.querySelector('#table-palpites thead');
     const tbody = document.querySelector('#table-palpites tbody');
@@ -421,7 +423,7 @@ function renderPredictions() {
         const cells = games.map(gameHeader => {
             const palpite = row[gameHeader];
             if (!palpite || palpite === '-' || palpite.trim() === '') {
-                return `<td></td>`;
+                return `<td class="cell-palpite-empty"></td>`;
             }
             
             const resultadoReal = extrairResultadoReal(gameHeader);
@@ -430,35 +432,39 @@ function renderPredictions() {
             let classePontuacao = '';
             let icone = '';
             let textoPontos = '';
+            let corFundo = '';
             
             if (pontuacao.tipo === 'exato') {
                 classePontuacao = 'palpite-exato';
                 icone = '⭐';
                 textoPontos = `${pontuacao.pontos} pts`;
+                corFundo = 'rgba(253, 197, 51, 0.2)';
             } else if (pontuacao.tipo === 'vencedor') {
                 classePontuacao = 'palpite-vencedor';
                 icone = '✅';
                 textoPontos = `${pontuacao.pontos} pt`;
+                corFundo = 'rgba(47, 172, 102, 0.15)';
             } else {
                 classePontuacao = 'palpite-erro';
                 icone = '❌';
                 textoPontos = `${pontuacao.pontos} pt`;
+                corFundo = 'rgba(200, 200, 200, 0.1)';
             }
             
-            return `<td>
-                <div class="cell-palpite">
-                    <span class="palpite-texto">${palpite}</span>
-                    <span class="palpite-info ${classePontuacao}">
-                        ${icone} ${textoPontos}
-                    </span>
+            return `<td class="cell-palpite">
+                <div class="palpite-conteudo">
+                    <div class="palpite-texto">${palpite}</div>
+                    <div class="palpite-pontuacao ${classePontuacao}" style="background: ${corFundo}; margin-top: 4px;">
+                        <span class="palpite-icone">${icone}</span>
+                        <span class="palpite-pontos-texto">${textoPontos}</span>
+                    </div>
                 </div>
             </td>`;
         }).join('');
         
-        return `<tr><td><strong>${row[partKey]}</strong></td>${cells}</tr>`;
+        return `<tr><td class="participante-nome"><strong>${row[partKey]}</strong></td>${cells}</tr>`;
     }).join('');
 }
-
 // ✅ MOSTRA VISUALMENTE OS ACERTOS/ERROS (sem alterar pontos)
 function searchUserPerformance(name) {
     const resultDiv = document.getElementById('resultado-desempenho');
